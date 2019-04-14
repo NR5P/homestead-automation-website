@@ -3,6 +3,26 @@
     <div>
         <form method="POST" action="">
             {{ form.hidden_tag() }}
+                <div>
+                    {{ form.username.label(class="input-field") }}
+                    {{ form.username(class="input-field") }}
+                </div>
+                <div>
+                    {{ form.email.label(class="input-field") }}
+                    {{ form.email(class="input-field") }}
+                </div>
+                <div>
+                    {{ form.password.label(class="input-field") }}
+                    {{ form.password(class="input-field") }}
+                </div>
+                <div>
+                    {{ form.confirm_password.label(class="input-field") }}
+                    {{ form.confirm_password(class="input-field") }}
+                </div>
+            <div>
+                {{ form.submit(class="btn green lighten-2 black-text") }}
+                <a href="{{ url_for('login') }}" class="btn deep-orange lighten-4 black-text">Already have an account?</a>
+            </div>
 
         </form>
     </div>
