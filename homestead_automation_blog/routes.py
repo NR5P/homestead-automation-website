@@ -1,8 +1,8 @@
-from flask import render_template, url_for, redirect, flash
+from flask import render_template, url_for, redirect, flash, request
 from homestead_automation_blog import app, db, bcrypt
 from homestead_automation_blog.forms import RegistrationForm, LoginForm
 from homestead_automation_blog.models import User, Post
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 posts = [
     {
@@ -55,7 +55,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            return redirect(url_for("home"))
+            next_page = request.args.get("next")
+            return redirect(next_page) if next_page else redirect(url_for("home"))
         else:
             flash("login unsuccessful, check email and password", "red accent-3")
     return render_template("login.html", title="login", form=form)
@@ -66,6 +67,7 @@ def logout():
     return redirect(url_for("home"))
 
 @app.route("/account")
+@login_required
 def account():
     return render_template("account.html", title="account")
 
