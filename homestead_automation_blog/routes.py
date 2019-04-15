@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash
-from homestead_automation_blog import app
+from homestead_automation_blog import app, db, bcrypt
 from homestead_automation_blog.forms import RegistrationForm, LoginForm
 from homestead_automation_blog.models import User, Post
 
@@ -35,8 +35,12 @@ def admin():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
         flash(f"Account created for { form.username.data }", "green accent-3")
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
     return render_template("register.html", title="register", form=form)
 
 @app.route("/login", methods=["GET", "POST"])

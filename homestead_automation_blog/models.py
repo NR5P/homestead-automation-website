@@ -1,5 +1,5 @@
 from datetime import datetime
-from homestead_automation_blog import db
+from homestead_automation_blog import db, login_manager
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
