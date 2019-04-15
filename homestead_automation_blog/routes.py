@@ -2,6 +2,7 @@ from flask import render_template, url_for, redirect, flash
 from homestead_automation_blog import app, db, bcrypt
 from homestead_automation_blog.forms import RegistrationForm, LoginForm
 from homestead_automation_blog.models import User, Post
+from flask_login import login_user, current_user, logout_user
 
 posts = [
     {
@@ -33,6 +34,8 @@ def admin():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
@@ -45,11 +48,43 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data == "nr5p@hotmail.com" and form.password.data == "password":
-            flash(f"login successful", "green accent-3")
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
             return redirect(url_for("home"))
         else:
-            flash("login unsuccessful", "red accent-3")
+            flash("login unsuccessful, check email and password", "red accent-3")
     return render_template("login.html", title="login", form=form)
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
+
+@app.route("/account")
+def account():
+    return render_template("account.html", title="account")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

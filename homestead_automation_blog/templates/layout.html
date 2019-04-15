@@ -20,8 +20,12 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="/">Home</a></li>
                 <li><a href="#">Products</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
                 <li><a href="/about">About</a></li>
             </ul>
         </div>
