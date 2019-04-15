@@ -1,10 +1,7 @@
-from flask import Flask, render_template, url_for, redirect, flash
-from flask_sqlalchemy import SQLAlchemy
-from forms import RegistrationForm, LoginForm
-
-app = Flask(__name__)
-
-app.config["SECRET_KEY"] = "0d1ca5c04c3bcb857ed2488007e88640"
+from flask import render_template, url_for, redirect, flash
+from homestead_automation_blog import app
+from homestead_automation_blog.forms import RegistrationForm, LoginForm
+from homestead_automation_blog.models import User, Post
 
 posts = [
     {
@@ -52,6 +49,3 @@ def login():
         else:
             flash("login unsuccessful", "red accent-3")
     return render_template("login.html", title="login", form=form)
-
-if __name__ == "__main__":
-    app.run(debug=True)
