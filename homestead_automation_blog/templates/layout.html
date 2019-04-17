@@ -21,6 +21,7 @@
                 <li><a href="/">Home</a></li>
                 <li><a href="#">Products</a></li>
                 {% if current_user.is_authenticated %}
+                    <li><a href="/post/new">New Post</a></li>
                     <li><a href="/account">Account</a></li>
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
